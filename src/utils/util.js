@@ -1,7 +1,7 @@
 import cookies from './util.cookies'
 import log from './util.log'
 
-let util = {
+const util = {
   cookies,
   log
 }
@@ -28,7 +28,7 @@ util.open = (url) => {
     url = document.location.protocol + '//' + url
   }
 
-  let a = document.createElement('a')
+  const a = document.createElement('a')
   a.setAttribute('href', url)
   a.setAttribute('target', '_blank')
   a.setAttribute('id', 'careyshop-link-temp')
@@ -55,8 +55,8 @@ util.randomLenNum = (len, date = false) => {
  * @returns {*}
  */
 util.md5 = (str) => {
-  let crypto = require('crypto')
-  let md5 = crypto.createHash('md5')
+  const crypto = require('crypto')
+  const md5 = crypto.createHash('md5')
 
   md5.update(str)
   return md5.digest('hex')
@@ -89,7 +89,7 @@ util.formatDataToTree = (data, key = 'menu_id', pid = 'parent_id', parent = {}) 
     return []
   }
 
-  let map = {}
+  const map = {}
   const isSetParent = Object.keys(parent).length > 0
 
   data.forEach(value => {
@@ -100,8 +100,8 @@ util.formatDataToTree = (data, key = 'menu_id', pid = 'parent_id', parent = {}) 
     map[value[key]] = { ...value }
   })
 
-  let tree = []
-  for (let id in data) {
+  const tree = []
+  for (const id in data) {
     if (!Object.prototype.hasOwnProperty.call(data, id)) {
       continue
     }
@@ -139,8 +139,8 @@ util.formatDataToTree = (data, key = 'menu_id', pid = 'parent_id', parent = {}) 
  * @returns {*}
  */
 util.dataReplace = (data, replace) => {
-  for (let value of data) {
-    for (let key in value) {
+  for (const value of data) {
+    for (const key in value) {
       if (!Object.prototype.hasOwnProperty.call(value, key)) {
         continue
       }
@@ -182,7 +182,7 @@ util.stringToByte = (value) => {
  * @returns {string}
  */
 util.guid = () => {
-  let s = []
+  const s = []
   const hexDigits = '0123456789abcdef'
 
   for (let i = 0; i < 36; i++) {
@@ -202,7 +202,7 @@ util.guid = () => {
  * @returns {*}
  */
 util.getSign = (params) => {
-  let sorted = Object.keys(params).sort()
+  const sorted = Object.keys(params).sort()
   let basestring = serverConfig.APP_SECRET
   const type = ['undefined', 'object', 'function']
 
@@ -211,7 +211,7 @@ util.getSign = (params) => {
       continue
     }
 
-    let k = sorted[i]
+    const k = sorted[i]
     if (type.indexOf(typeof params[k]) === -1) {
       basestring += k + (typeof params[k] === 'boolean' ? Number(params[k]) : params[k])
     }
@@ -394,7 +394,7 @@ util.setImageSrcList = (srcList, index) => {
   const before = srcList.slice(index)
   const image = before.concat(srcList.slice(0, index))
 
-  let imageList = []
+  const imageList = []
   image.forEach(value => {
     imageList.push(value.url)
   })
@@ -423,10 +423,10 @@ util.descartes = (array) => {
   }
 
   return [].reduce.call(array, (col, set) => {
-    let res = []
+    const res = []
     col.forEach((c) => {
       set.forEach((s) => {
-        let t = [].concat(Array.isArray(c) ? c : [c])
+        const t = [].concat(Array.isArray(c) ? c : [c])
         t.push(s)
         res.push(t)
       })
