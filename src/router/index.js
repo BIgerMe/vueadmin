@@ -11,7 +11,7 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
-import goodsRouter from "@/router/modules/goods";
+import goodsRouter from '@/router/modules/goods'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -131,6 +131,18 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   goodsRouter,
+  {
+    path: '/bearing',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/bearing/index'),
+        name: 'Icons',
+        meta: { title: '生产准备', icon: 'people', noCache: true }
+      }
+    ]
+  },
   {
     path: '/permission',
     component: Layout,
