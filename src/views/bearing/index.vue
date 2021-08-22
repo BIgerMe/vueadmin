@@ -1,5 +1,13 @@
 <template>
-  <el-table
+  <div>
+    <el-card>
+      <el-col :span="2" class="text-center">
+        <router-link class="pan-btn blue-btn" to="/bearing/add">
+          新增物品
+        </router-link>
+      </el-col>
+    </el-card>
+    <el-table
     v-loading="listLoading"
     :data="list"
     border
@@ -23,23 +31,74 @@
     <el-table-column label="宝宝用品" prop="baby_use" min-width="150px" />
     <el-table-column label="重要性" prop="importance" min-width="150px">
       <template slot-scope="{row}">
-        <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+        <el-rate
+          v-model="row.importance"
+          :max="3"
+          :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+        </el-rate>
       </template>
     </el-table-column>
-
+      <el-table-column label="描述" prop="content" min-width="300px" >
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-input v-model="row.content" class="edit-input" size="small" />
+            <el-button
+              class="cancel-btn"
+              size="small"
+              icon="el-icon-refresh"
+              type="warning"
+              @click="cancelEdit(row)"
+            >
+              cancel
+            </el-button>
+          </template>
+          <span v-else>{{ row.content }}</span>
+        </template>
+      </el-table-column>
+    <el-table-column align="center" label="操作" width="120">
+      <template slot-scope="{row}">
+        <el-button
+          v-if="row.edit"
+          type="success"
+          size="small"
+          icon="el-icon-circle-check-outline"
+          @click="confirmEdit(row)"
+        >
+          Ok
+        </el-button>
+        <el-button
+          v-else
+          type="primary"
+          size="small"
+          icon="el-icon-edit"
+          @click="row.edit=!row.edit"
+        >
+          编辑
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
+  <pagination v-show="listQuery.total>0" :total="listQuery.total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+
+  </div>
 </template>
 
 <script>
-import { add, search, del } from '@/api/bearing'
-import { fetchList } from '@/api/article'
+import { update, search, del } from '@/api/bearing'
+import Pagination from "@/components/Pagination";
 
 export default {
   name: 'Bearing',
+  components: { Pagination },
   data() {
     return {
       list: null,
-      listLoading: true
+      listQuery:{
+        page:1,
+        limit:10,
+        total:0
+      },
+      listLoading: false
     }
   },
   created() {
@@ -47,12 +106,31 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      search({}).then(response => {
-        this.list = response.data
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1 * 1000)
+      search(this.listQuery).then(response => {
+        const items = response.data
+        this.listQuery.total = response.total
+        this.list = items.map(v => {
+          this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
+          v.originalContent = v.content //  will be used when user click the cancel botton
+          return v
+        })
+      })
+    },
+    cancelEdit(row) {
+      row.content = row.originalContent
+      row.edit = false
+      this.$message({
+        message: '描述未做修改',
+        type: 'warning'
+      })
+    },
+    async confirmEdit(row) {
+      const {data} = await update({id:row.id,content:row.content})
+      row.edit = false
+      row.originalContent = row.content
+      this.$message({
+        message: '描述已更新',
+        type: 'success'
       })
     }
   }

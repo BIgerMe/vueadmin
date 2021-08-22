@@ -24,3 +24,11 @@ export function del() {
     data
   })
 }
+
+export function update(data){
+  return request({
+    url: '/z/bearing/update',
+    method: 'post',
+    data
+  })
+}

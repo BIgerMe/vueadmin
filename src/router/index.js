@@ -100,6 +100,7 @@ export const constantRoutes = [
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -140,7 +141,14 @@ export const asyncRoutes = [
         component: () => import('@/views/bearing/index'),
         name: 'Icons',
         meta: { title: '生产准备', icon: 'people', noCache: true }
-      }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/bearing/add'),
+        name: 'Icons',
+        hidden: true,
+        meta: { title: '新增物品', icon: 'add', noCache: true }
+      },
     ]
   },
   {
