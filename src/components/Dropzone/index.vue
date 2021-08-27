@@ -96,16 +96,17 @@ export default {
       thumbnailHeight: this.thumbnailHeight,
       maxFiles: this.maxFiles,
       maxFilesize: this.maxFilesize,
-      dictRemoveFile: 'Remove',
+      dictRemoveFile: '删除',
       addRemoveLinks: this.showRemoveLink,
       acceptedFiles: this.acceptedFiles,
       autoProcessQueue: this.autoProcessQueue,
-      dictDefaultMessage: '<i style="margin-top: 3em;display: inline-block" class="material-icons">' + this.defaultMsg + '</i><br>Drop files here to upload',
+      dictDefaultMessage: '<i style="margin-top: 3em;display: inline-block" class="material-icons">' + this.defaultMsg + '</i><br>把图片拖拽到这里',
       dictMaxFilesExceeded: '只能一个图',
-      previewTemplate: '<div class="dz-preview dz-file-preview">  <div class="dz-image" style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" ><img style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" data-dz-thumbnail /></div>  <div class="dz-details"><div class="dz-size"><span data-dz-size></span></div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>  <div class="dz-error-message"><span data-dz-errormessage></span></div>  <div class="dz-success-mark"> <i class="material-icons">done</i> </div>  <div class="dz-error-mark"><i class="material-icons">error</i></div></div>',
+      previewTemplate: '<div class="dz-preview dz-file-preview">  <div class="dz-image" style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" ><img style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" data-dz-thumbnail /></div>  <div class="dz-details"><div class="dz-size"><span data-dz-size></span></div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>  <div class="dz-error-message"><span data-dz-errormessage></span></div>  <div class="dz-success-mark"> <i class="material-icons">成功</i> </div>  <div class="dz-error-mark"><i class="material-icons">错误</i></div></div>',
       init() {
         const val = vm.defaultImg
         if (!val) return
+        /* 初始有数据*/
         if (Array.isArray(val)) {
           if (val.length === 0) return
           val.map((v, i) => {
@@ -127,19 +128,9 @@ export default {
         }
       },
       accept: (file, done) => {
-        /* 七牛*/
-        // const token = this.$store.getters.token;
-        // getToken(token).then(response => {
-        //   file.token = response.data.qiniu_token;
-        //   file.key = response.data.qiniu_key;
-        //   file.url = response.data.qiniu_url;
-        //   done();
-        // })
         done()
       },
       sending: (file, xhr, formData) => {
-        // formData.append('token', file.token);
-        // formData.append('key', file.key);
         vm.initOnce = false
       }
     })
@@ -148,14 +139,14 @@ export default {
       document.addEventListener('paste', this.pasteImg)
     }
 
-    this.dropzone.on('success', file => {
-      vm.$emit('dropzone-success', file, vm.dropzone.element)
+    this.dropzone.on('success', (file, response) => {
+      vm.$emit('dropzone-success', file, response)
     })
     this.dropzone.on('addedfile', file => {
       vm.$emit('dropzone-fileAdded', file)
     })
     this.dropzone.on('removedfile', file => {
-      vm.$emit('dropzone-removedFile', file)
+      vm.$emit('dropzone-removedFile', file, vm.dropzone.element)
     })
     this.dropzone.on('error', (file, error, xhr) => {
       vm.$emit('dropzone-error', file, error, xhr)
@@ -206,6 +197,7 @@ export default {
 </script>
 
 <style scoped>
+
     .dropzone {
         border: 2px solid #E5E5E5;
         font-family: 'Roboto', sans-serif;
