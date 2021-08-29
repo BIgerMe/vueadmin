@@ -25,6 +25,14 @@ export function del() {
   })
 }
 
+export function updateContent(data){
+  return request({
+    url: '/z/bearing/updateContent',
+    method: 'post',
+    data
+  })
+}
+
 export function update(data){
   return request({
     url: '/z/bearing/update',
@@ -32,3 +40,5 @@ export function update(data){
     data
   })
 }
+
+

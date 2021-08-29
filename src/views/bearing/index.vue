@@ -21,15 +21,27 @@
       </template>
     </el-table-column>
     <el-table-column label="物品名称" prop="name" min-width="150px" />
-    <el-table-column label="数量" prop="qty" min-width="150px">
+    <el-table-column label="图片" min-width="100">
+      <template slot-scope="{row}">
+        <div class="demo-image__preview">
+          <el-image
+            v-if="row.pictures"
+            style="width: 80px; height: 80px"
+            :src="row.pictures ? row.pictures[0] : ''"
+            :preview-src-list="row.pictures">
+          </el-image>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column label="数量" prop="qty" min-width="60px">
       <template slot-scope="{row}">
         {{ row.qty + row.unit }}
       </template>
     </el-table-column>
-    <el-table-column label="是否必备" prop="is_necessary" min-width="150px" />
-    <el-table-column label="妈妈用品" prop="mom_use" min-width="150px" />
-    <el-table-column label="宝宝用品" prop="baby_use" min-width="150px" />
-    <el-table-column label="重要性" prop="importance" min-width="150px">
+    <el-table-column label="是否必备" prop="is_necessary" min-width="80px" />
+    <el-table-column label="妈妈用品" prop="mom_use" min-width="80px" />
+    <el-table-column label="宝宝用品" prop="baby_use" min-width="80px" />
+    <el-table-column label="重要性" prop="importance" min-width="100px">
       <template slot-scope="{row}">
         <el-rate
           v-model="row.importance"
@@ -41,7 +53,7 @@
       <el-table-column label="描述" prop="content" min-width="300px" >
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-input v-model="row.content" class="edit-input" size="small" />
+            <el-input type="textarea" v-model="row.content" class="edit-input" style="width: 70%;" size="small" />
             <el-button
               class="cancel-btn"
               size="small"
@@ -49,47 +61,104 @@
               type="warning"
               @click="cancelEdit(row)"
             >
-              cancel
+              取消
             </el-button>
           </template>
           <span v-else>{{ row.content }}</span>
         </template>
       </el-table-column>
-    <el-table-column align="center" label="操作" width="120">
+    <el-table-column align="center" label="操作" width="300">
       <template slot-scope="{row}">
-        <el-button
-          v-if="row.edit"
-          type="success"
-          size="small"
-          icon="el-icon-circle-check-outline"
-          @click="confirmEdit(row)"
-        >
-          Ok
-        </el-button>
-        <el-button
-          v-else
-          type="primary"
-          size="small"
-          icon="el-icon-edit"
-          @click="row.edit=!row.edit"
-        >
-          编辑
-        </el-button>
+        <el-button v-if="row.edit" type="success" size="mini" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">Ok</el-button>
+        <el-button v-else type="primary" size="mini" icon="el-icon-edit" @click="row.edit=!row.edit">编辑描述</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-edit" @click="showEdit(row)">编辑</el-button>
       </template>
     </el-table-column>
   </el-table>
-  <pagination v-show="listQuery.total>0" :total="listQuery.total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="listQuery.total>0" :total="listQuery.total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+
+    <el-dialog title="编辑" width="80%" :visible.sync="dialogFormVisible">
+    <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+      <el-card class="box-card">
+        <div class="el-card__body" style="border-bottom: 1px #eeeeee solid;margin-bottom: 10px">
+          <el-row>
+            <el-col :span="24">
+              <el-col :span="12">
+                <el-form-item label="物品名称" required>
+                  <el-input v-model="form.name" show-word-limit />
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="重要性">
+                  <el-rate
+                    v-model="form.importance"
+                    :max="3"
+                    :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                    :low-threshold="1"
+                    :high-threshold="3"
+                    style="display:inline-block"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="数量">
+                  <el-input-number v-model="form.qty" controls-position="right" :min="1" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="单位"><el-input v-model="form.unit" /></el-form-item>
+              </el-col>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="必备">
+                <el-radio v-model="form.is_necessary" label="是">是</el-radio>
+                <el-radio v-model="form.is_necessary" label="否">否</el-radio>
+              </el-form-item>
+              <el-form-item label="妈妈用品">
+                <el-radio v-model="form.mom_use" label="是">是</el-radio>
+                <el-radio v-model="form.mom_use" label="否">否</el-radio>
+              </el-form-item>
+              <el-form-item label="宝宝用品">
+                <el-radio v-model="form.baby_use" label="是">是</el-radio>
+                <el-radio v-model="form.baby_use" label="否">否</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="描述内容">
+                <el-input v-model="form.content" type="textarea" /></el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-col :span="24">
+                <el-form-item label="物品图片">
+                  <div class="editor-container">
+                    <dropzone id="picture" ref="picture" url="http://war3.xxroom.xyz/z/qiniu/uploadImg" @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" :default-img="form.pictures ? form.pictures : []" />
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="el-footer">
+          <el-button type="primary" @click="handleSubmit('form')">更新保存</el-button>
+          <el-button>取消</el-button>
+        </div>
+      </el-card>
+    </el-form>
+  </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { update, search, del } from '@/api/bearing'
+  import {update,updateContent, search, del, add} from '@/api/bearing'
 import Pagination from "@/components/Pagination";
+import Dropzone from '@/components/Dropzone'
+import 'jquery'
+  import dropzone from "@/views/components-demo/dropzone";
 
 export default {
   name: 'Bearing',
-  components: { Pagination },
+  components: { Pagination , Dropzone},
   data() {
     return {
       list: null,
@@ -98,7 +167,24 @@ export default {
         limit:10,
         total:0
       },
-      listLoading: false
+      listLoading: false,
+      dialogFormVisible:false,
+      form: {
+        'id':'',
+        'name': '',
+        'qty': '',
+        'unit': '',
+        'is_necessary': '是',
+        'mom_use': '否',
+        'baby_use': '否',
+        'importance': 1,
+        'content': '',
+        'pictures':''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -125,13 +211,55 @@ export default {
       })
     },
     async confirmEdit(row) {
-      const {data} = await update({id:row.id,content:row.content})
+      const {data} = await updateContent({id:row.id,content:row.content})
       row.edit = false
       row.originalContent = row.content
       this.$message({
         message: '描述已更新',
         type: 'success'
       })
+    },
+    showEdit(r){
+      this.form = JSON.parse(JSON.stringify(r))
+      this.dialogFormVisible = true
+    },
+    handleSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          update(this.form).then(response => {
+            this.$notify({
+              title: 'Success',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+          this.getList()
+          this.dialogFormVisible = false
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+        this.$refs['picture'].removeAllFiles()
+      })
+    },
+    changePic(){
+      let pictures = []
+      $("#picture img").each(function(i,v){
+        pictures.push(v.src)
+      })
+      console.log(pictures)
+      this.form.pictures = pictures
+    },
+    /* 图片上传*/
+    dropzoneS(file, response) {
+      file.previewElement.getElementsByTagName('img')[0].src = JSON.parse(response)['data'][0] //data替换成七牛URL
+      this.changePic()
+      this.$message({ message: '上传成功', type: 'success' })
+    },
+    dropzoneR(file, dom) {
+      this.changePic()
+      this.$message({ message: '删除成功', type: 'success' })
     }
   }
 }

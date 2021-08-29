@@ -51,7 +51,7 @@ export default {
     },
     maxFiles: {
       type: Number,
-      default: 3
+      default: 5
     },
     autoProcessQueue: {
       type: Boolean,
@@ -100,8 +100,8 @@ export default {
       addRemoveLinks: this.showRemoveLink,
       acceptedFiles: this.acceptedFiles,
       autoProcessQueue: this.autoProcessQueue,
-      dictDefaultMessage: '<i style="margin-top: 3em;display: inline-block" class="material-icons">' + this.defaultMsg + '</i><br>把图片拖拽到这里',
-      dictMaxFilesExceeded: '只能一个图',
+      dictDefaultMessage: '<i style="margin-top: 1em;display: inline-block" class="material-icons">' + this.defaultMsg + '</i><br>把图片拖拽到这里',
+      dictMaxFilesExceeded: '只能5张图',
       previewTemplate: '<div class="dz-preview dz-file-preview">  <div class="dz-image" style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" ><img style="width:' + this.thumbnailWidth + 'px;height:' + this.thumbnailHeight + 'px" data-dz-thumbnail /></div>  <div class="dz-details"><div class="dz-size"><span data-dz-size></span></div> <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>  <div class="dz-error-message"><span data-dz-errormessage></span></div>  <div class="dz-success-mark"> <i class="material-icons">成功</i> </div>  <div class="dz-error-mark"><i class="material-icons">错误</i></div></div>',
       init() {
         const val = vm.defaultImg
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     removeAllFiles() {
-      this.dropzone.removeAllFiles(true)
+      this.dropzone.removeAllFiles()
     },
     processQueue() {
       this.dropzone.processQueue()
