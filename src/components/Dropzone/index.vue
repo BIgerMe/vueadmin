@@ -7,7 +7,6 @@
 <script>
 import Dropzone from 'dropzone'
 import 'dropzone/dist/dropzone.css'
-// import { getToken } from 'api/qiniu';
 
 Dropzone.autoDiscover = false
 
@@ -79,7 +78,7 @@ export default {
   watch: {
     defaultImg(val) {
       if (val.length === 0) {
-        this.initOnce = false
+        // this.initOnce = false
         return
       }
       if (!this.initOnce) return
@@ -138,7 +137,6 @@ export default {
     if (this.couldPaste) {
       document.addEventListener('paste', this.pasteImg)
     }
-
     this.dropzone.on('success', (file, response) => {
       vm.$emit('dropzone-success', file, response)
     })
@@ -161,7 +159,10 @@ export default {
   },
   methods: {
     removeAllFiles() {
-      this.dropzone.removeAllFiles()
+      this.dropzone.removeAllFiles(true)
+    },
+    initOnceStatus() {
+      this.initOnce = true
     },
     processQueue() {
       this.dropzone.processQueue()
@@ -179,7 +180,7 @@ export default {
           const mockFile = { name: 'name' + i, size: 12345, url: v }
           this.dropzone.options.addedfile.call(this.dropzone, mockFile)
           this.dropzone.options.thumbnail.call(this.dropzone, mockFile, v)
-          mockFile.previewElement.classList.add('dz-success')
+          // mockFile.previewElement.classList.add('dz-success')
           mockFile.previewElement.classList.add('dz-complete')
           return true
         })
