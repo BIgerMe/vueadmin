@@ -84,7 +84,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  /*  {
     path: '/documentation',
     component: Layout,
     children: [
@@ -95,7 +95,7 @@ export const constantRoutes = [
         meta: { title: 'Documentation', icon: 'documentation', affix: true }
       }
     ]
-  },
+  },*/
   {
     path: '/guide',
     component: Layout,
@@ -148,7 +148,7 @@ export const asyncRoutes = [
         name: 'Icons',
         hidden: true,
         meta: { title: '新增物品', icon: 'add', noCache: true }
-      },
+      }
     ]
   },
   {

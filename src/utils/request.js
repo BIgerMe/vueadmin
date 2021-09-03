@@ -13,7 +13,7 @@ const service = axios.create({
     'Content-Type': 'application/json;charset=UTF-8'
     // "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
   },
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 
 // request interceptor

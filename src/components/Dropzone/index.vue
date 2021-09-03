@@ -180,7 +180,7 @@ export default {
           const mockFile = { name: 'name' + i, size: 12345, url: v }
           this.dropzone.options.addedfile.call(this.dropzone, mockFile)
           this.dropzone.options.thumbnail.call(this.dropzone, mockFile, v)
-          // mockFile.previewElement.classList.add('dz-success')
+          mockFile.previewElement.classList.add('dz-success')
           mockFile.previewElement.classList.add('dz-complete')
           return true
         })
