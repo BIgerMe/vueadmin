@@ -23,3 +23,18 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function update(data){
+  return request({
+    url: '/z/user/update',
+    method:'post',
+    data:data
+  })
+}
+export function changePassword(data){
+  return request({
+    url: '/z/user/changepassword',
+    method:'post',
+    data:data
+  })
+}

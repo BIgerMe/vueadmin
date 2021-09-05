@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo ,update ,changePassword} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -7,7 +7,8 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  tags:[],
 }
 
 const mutations = {
@@ -25,6 +26,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_TAGS: (state, tags) => {
+    state.tags = tags
   }
 }
 
@@ -54,7 +58,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction,tags } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -65,13 +69,37 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
+        commit('SET_TAGS', tags)
         resolve(data)
       }).catch(error => {
         reject(error)
       })
     })
   },
-
+  update({commit,state},user){
+    return new Promise((resolve,reject)=>{
+      update(user).then(response=>{
+        commit('SET_NAME', user.name)
+        commit('SET_AVATAR', user.avatar)
+        commit('SET_TAGS', user.tags)
+        resolve()
+      }).catch(error=>{
+        reject(error)
+      })
+    })
+  },
+  changePassword({commit,state},user){//更换密码
+    return new Promise((resolve,reject)=>{
+      changePassword(user).then(response=>{
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        resolve()
+      }).catch(error=>{
+        reject(error)
+      })
+    })
+  },
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
