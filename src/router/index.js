@@ -152,6 +152,36 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/stock',
+    component: Layout,
+    redirect: 'noRedirect',
+    name: 'Charts',
+    meta: {
+      title: '股票',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'stock_basic',
+        component: () => import('@/views/stock/stock-basic'),
+        name: 'StockBasic',
+        meta: { title: '股票基础信息', noCache: true }
+      },
+      {
+        path: 'share-float',
+        component: () => import('@/views/stock/share-float'),
+        name: 'ShareFloat',
+        meta: { title: '限售股解禁', noCache: true }
+      },
+      {
+        path: 'mix-chart',
+        component: () => import('@/views/stock/mix-chart'),
+        name: 'MixChart',
+        meta: { title: 'Mix Chart', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
