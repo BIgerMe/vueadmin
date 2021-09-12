@@ -58,8 +58,8 @@
           this.chart = echarts.init(document.getElementById(this.id))
           let option = {
             title: {
-              text: '上证指数',
-              left: 0
+              text: '日线',
+              left: 150
             },
             tooltip: {
               trigger: 'axis',
