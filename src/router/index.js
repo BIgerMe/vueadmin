@@ -178,6 +178,13 @@ export const asyncRoutes = [
         component: () => import('@/views/stock/mix-chart'),
         name: 'MixChart',
         meta: { title: 'Mix Chart', noCache: true }
+      },
+      {
+        path: 'stock-detail/:ts_code',
+        component: () => import('@/views/stock/stock-detail'),
+        name: 'StockDetail',
+        hidden: true,
+        meta: { title: '股票详情页', icon: 'detail', noCache: true }
       }
     ]
   },
