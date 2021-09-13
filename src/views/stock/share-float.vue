@@ -1,16 +1,16 @@
 <template>
-  <div class="app-container" >
+  <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.holder_name" placeholder="股东名称" style="width: 300px;" class="filter-item" />
       <el-date-picker
-        class="filter-item"
         v-model="listQuery.date"
+        class="filter-item"
         type="daterange"
         range-separator="至"
         value-format="yyyyMMdd"
         start-placeholder="开始日期"
-        end-placeholder="结束日期">
-      </el-date-picker>
+        end-placeholder="结束日期"
+      />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getList">
         搜索
       </el-button>
@@ -25,18 +25,18 @@
       style="width: 100%;"
     >
       <el-table-column label="ts代码" align="center" prop="ts_code" min-width="100px" />
-      <el-table-column label="股票名称" align="center" prop="name" min-width="100px" >
+      <el-table-column label="股票名称" align="center" prop="name" min-width="100px">
         <template slot-scope="{row}">
           <router-link class="pan-btn blue-btn" :to="{path:'/stock/stock-detail/'+row.ts_code}">
             {{ row.name }}
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="解禁日期" align="center"  prop="float_date" min-width="80px" />
-      <el-table-column label="流通股份" align="center"  prop="float_share" min-width="80px" />
-      <el-table-column label="流通股份占总股本比率" align="center"  prop="float_ratio" min-width="80px" />
+      <el-table-column label="解禁日期" align="center" prop="float_date" min-width="80px" />
+      <el-table-column label="流通股份" align="center" prop="float_share" min-width="80px" />
+      <el-table-column label="流通股份占总股本比率" align="center" prop="float_ratio" min-width="80px" />
       <el-table-column label="股东名称" prop="holder_name" min-width="250px" />
-      <el-table-column label="股份类型" align="center"  prop="share_type" min-width="80px" />
+      <el-table-column label="股份类型" align="center" prop="share_type" min-width="80px" />
     </el-table>
   </div>
 </template>
@@ -55,8 +55,8 @@ export default {
     return {
       list: null,
       listQuery: {
-        holder_name:'',
-        date:'',
+        holder_name: '',
+        date: ['20210901', '20220301'],
         page: 1,
         limit: 10,
         total: 0
