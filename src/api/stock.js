@@ -15,6 +15,20 @@ export function Daily(data) {
     params: { data }
   })
 }
+export function Weekly(data) {
+  return request({
+    url: '/z/stock/weekly',
+    method: 'get',
+    params: { data }
+  })
+}
+export function Monthly(data) {
+  return request({
+    url: '/z/stock/monthly',
+    method: 'get',
+    params: { data }
+  })
+}
 export function ShareFloatList(data) {
   return request({
     url: '/z/stock/sharefloatlist',
@@ -25,6 +39,13 @@ export function ShareFloatList(data) {
 export function StockBasicList(data) {
   return request({
     url: '/z/stock/stockbasiclist',
+    method: 'get',
+    params: { data }
+  })
+}
+export function stkHolderNumber(data) {
+  return request({
+    url: '/z/stock/stkholdernumber',
     method: 'get',
     params: { data }
   })

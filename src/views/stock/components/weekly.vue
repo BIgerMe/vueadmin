@@ -5,7 +5,7 @@
 <script>
 import echarts from 'echarts'
 import resize from '@/components/Charts/mixins/resize'
-import { Daily } from '@/api/stock'
+import { Weekly } from '@/api/stock'
 
 export default {
   mixins: [resize],
@@ -20,7 +20,7 @@ export default {
     },
     id: {
       type: String,
-      default: 'daily'
+      default: 'weekly'
     },
     width: {
       type: String,
@@ -53,12 +53,12 @@ export default {
   },
   methods: {
     initChart() {
-      Daily({ ts_code: this.ts_code }).then(response => {
+      Weekly({ ts_code: this.ts_code }).then(response => {
         this.data0 = this.splitData(response.data)
         this.chart = echarts.init(document.getElementById(this.id))
         const option = {
           title: {
-            text: '日线',
+            text: '周线',
             left: 150
           },
           tooltip: {
@@ -95,7 +95,7 @@ export default {
           dataZoom: [
             {
               type: 'inside',
-              start: 90,
+              start: 82,
               end: 100
             },
             {
@@ -128,7 +128,7 @@ export default {
                 data: [
                   {
                     name: 'XX标点',
-                    coord: ['2020/5/31', 2300],
+                    coord: ['2013/5/31', 2300],
                     value: 2300,
                     itemStyle: {
                       color: 'rgb(41,60,85)'
