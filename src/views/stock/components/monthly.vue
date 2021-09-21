@@ -70,12 +70,20 @@ export default {
           legend: {
             data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
           },
-          grid: {
-            left: '10%',
-            right: '10%',
-            bottom: '15%'
-          },
-          xAxis: {
+          grid: [
+            {
+              left: '10%',
+              right: '8%',
+              height: '50%'
+            },
+            {
+              left: '10%',
+              right: '8%',
+              top: '63%',
+              height: '16%'
+            }
+          ],
+          xAxis: [{
             type: 'category',
             data: this.data0.categoryData,
             scale: true,
@@ -86,21 +94,48 @@ export default {
             min: 'dataMin',
             max: 'dataMax'
           },
-          yAxis: {
-            scale: true,
-            splitArea: {
-              show: true
+            {
+              type: 'category',
+              gridIndex: 1,
+              data: this.data0.categoryData,
+              scale: true,
+              boundaryGap: false,
+              axisLine: {onZero: false},
+              axisTick: {show: false},
+              splitLine: {show: false},
+              axisLabel: {show: false},
+              splitNumber: 20,
+              min: 'dataMin',
+              max: 'dataMax'
             }
-          },
+          ],
+          yAxis: [
+            {
+              scale: true,
+              splitArea: {
+                show: true
+              }
+            },{
+              scale: true,
+              gridIndex: 1,
+              splitNumber: 2,
+              axisLabel: {show: false},
+              axisLine: {show: false},
+              axisTick: {show: false},
+              splitLine: {show: false}
+            }
+          ],
           dataZoom: [
             {
               type: 'inside',
-              start: 30,
+              xAxisIndex:[0, 1],
+              start: 90,
               end: 100
             },
             {
               show: true,
               type: 'slider',
+              xAxisIndex:[0, 1],
               top: '90%',
               start: 50,
               end: 100
@@ -238,8 +273,22 @@ export default {
               lineStyle: {
                 opacity: 0.5
               }
+            },
+            {
+              name: 'Volume',
+              type: 'bar',
+              xAxisIndex: 1,
+              yAxisIndex: 1,
+              itemStyle: {
+                color: '#7fbe9e'
+              },
+              emphasis: {
+                itemStyle: {
+                  color: '#140'
+                }
+              },
+              data: this.data0.vol
             }
-
           ]
         }
         this.chart.setOption(option)
@@ -248,10 +297,10 @@ export default {
     splitData(rawData) {
       const categoryData = []
       const values = []
+      const vol = []
       for (let i = 0; i < rawData.length; i++) {
-        // console.log(rawData[i]);return false;
-        // categoryData.push(rawData[i].splice(0, 1)[0]);
         categoryData.push(rawData[i].trade_date)
+        vol.push(parseInt(rawData[i].vol))
         const v = [
           parseFloat(rawData[i].open),
           parseFloat(rawData[i].close),
@@ -262,7 +311,8 @@ export default {
       }
       return {
         categoryData: categoryData,
-        values: values
+        values: values,
+        vol:vol
       }
     },
     calculateMA(dayCount) {
